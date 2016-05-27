@@ -215,3 +215,65 @@ console.log(isMobilePhone('188000'));
 /*
     3. DOM
  */
+// 为element增加一个样式名为newClassName的新样式
+function addClass(element, newClassName) {
+    // your implement
+    if (element.className){
+        element.className = element.className + " " + newClassName;
+    } else {
+        element.className = newClassName;
+    }
+}
+var myEle = document.getElementById("number1");
+var myEle2 = document.getElementById("number2");
+var addSpan = document.getElementById("addSpan")
+addClass(myEle,"def");
+addClass(myEle,"abc2");
+console.log(myEle.className);
+
+// 移除element中的样式oldClassName
+function removeClass(element, oldClassName) {
+    // your implement
+    var reg = new RegExp('\\s|^'+oldClassName+'\\s|$');
+    element.className = element.className.replace(reg,' ');
+}
+
+function removeClass2(element,oldClassName){
+    var reg = new RegExp('\\s|^'+oldClassName+'\\s|$');
+    var arr = element.className.split(reg);
+    element.className = arr.join(' ');
+}
+
+removeClass2(myEle,"abc");
+console.log(myEle.className);
+
+// 判断siblingNode和element是否为同一个父元素下的同一级的元素，返回bool值
+function isSiblingNode(element, siblingNode) {
+    // your implement
+    if (element.parentNode == siblingNode.parentNode){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+console.log(isSiblingNode(myEle,myEle2));
+console.log(isSiblingNode(myEle,addSpan));
+
+
+// 获取element相对于浏览器窗口的位置，返回一个对象{x, y}
+function getPosition(element) {
+    // your implement
+    var x = element.offsetLeft;
+
+    var y = element.offsetTop;
+    if (element.offsetParent){
+        x += getPosition(element.offsetParent).x;
+        y += getPosition(element.offsetParent).y
+    }
+    var pos = {"x":x,"y":y}
+    return pos;
+}
+
+console.log(getPosition(myEle));
+console.log(getPosition(addSpan));
