@@ -324,20 +324,150 @@ console.log(getPosition(addSpan));
 // 实现一个简单的Query
 //
 
+function $(selector) {
+    var element = document.body;
+    var result1 = 0;
+
+    function iterator(element, selector) {
+        var eleChild = element.children;
+        if (eleChild.length != 0) {
+            if (selector.charAt(0) === '#') {
+                for (var i = 0; i < eleChild.length; i++) {
+                    if (eleChild[i].children.length == 0) {
+                        if (eleChild[i].id === selector.substr(1)) {
+                            result1 = eleChild[i];
+                            return result1;
+                        }
+                    } else {
+                        if (eleChild[i].id === selector.substr(1)) {
+                            result1 = eleChild[i]
+                            return result1;
+                        } else {
+                            iterator(eleChild[i], selector);
+                        }
+                    }
+                }
+            }
+
+            if (selector.charAt(0) === '.') {
+                for (var i = 0; i < eleChild.length; i++) {
+
+                    if (eleChild[i].children.length == 0) {
+                        if (hasClass1(eleChild[i], selector.substr(1))) {
+                            result1 = eleChild[i];
+                            return result1;
+                        }
+                    } else {
+                        if (hasClass1(eleChild[i], selector.substr(1))) {
+                            result1 = eleChild[i];
+                            return result1;
+                        } else {
+                            iterator(eleChild[i], selector);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            if (/\w/i.test(selector.charAt(0))) {
+                for (var i = 0; i < eleChild.length; i++) {
+                    if (eleChild[i].children.length == 0) {
+                        if (eleChild[i].tagName === selector.toUpperCase()) {
+                            result1 = eleChild[i]
+                            return result1;
+                        }
+                    } else {
+                        if (eleChild[i].tagName === selector.toUpperCase()) {
+                            result1 = eleChild[i]
+                            return result1;
+                        } else {
+                            iterator(eleChild[i], selector.toUpperCase());
+                        }
+                    }
+                }
+            }
+
+            if (selector.indexOf(']')!=-1 && selector.indexOf('=') == -1) {
+                for (var i = 0; i < eleChild.length; i++) {
+                    if (eleChild[i].children.length == 0) {
+                        if (eleChild[i].getAttribute(selector.substr(1, selector.length - 2))) {
+                            result1 = eleChild[i];
+                            return result1;
+                        }
+                    } else {
+                        if (eleChild[i].getAttribute(selector.substr(1, selector.length - 2))) {
+                            result1 = eleChild[i];
+                            return result1;
+                        } else {
+                            iterator(eleChild[i], selector);
+                        }
+                    }
+                }
+            }
+
+            if (selector.indexOf(']')!=-1 && /\=/.test(selector)) {
+                var selectorOri = selector.substr(1, selector.length - 2);
+                var selectorArr = selectorOri.split('=');
+                var selectorName = selectorArr[0];
+                var selectorValue = selectorArr[1];
+                for (var i = 0; i < eleChild.length; i++) {
+                    if(eleChild[i].children.length == 0){
+                        if (eleChild[i].getAttribute(selectorName)) {
+                            if (eleChild[i].getAttribute(selectorName) === selectorValue) {
+                                result1 = eleChild[i];
+                                return result1;
+                            }
+                        }
+                    } else {
+                        if (eleChild[i].getAttribute(selectorName)) {
+                            if (eleChild[i].getAttribute(selectorName) === selectorValue) {
+                                result1 = eleChild[i];
+                                return result1;
+                            }
+                        } else {
+                            iterator(eleChild[i], selector);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    iterator(element, selector)
+    return result1;
+    //if (selector.charAt(0) === '#'){
+    //    return document.getElementById(selector.substr(1));
+    //} else if(selector.charAt(0) === '.') {
+    //    return document.getElementsByClassName(selector.substr(1)[0])
+    //} else if(/\w/.test(selector.charAt(0))){
+    //    return document.getElementsByTagName(selector)[0];
+    //} else if (/^\[[^=]/.test(selector)) {
+    //    //return document.getElementsByName()
+    //}
+}
+
 
 // 可以通过id获取DOM对象，通过#标示，例如
-console.log($("#adom")); // 返回id为adom的DOM对象
+console.log($("#adom1")); // 返回id为adom1的DOM对象
+console.log($("#adom2")); // 返回id为adom2的DOM对象
 
-// 可以通过tagName获取DOM对象，例如
-$("a"); // 返回第一个<a>对象
 
 // 可以通过样式名称获取DOM对象，例如
-$(".classa"); // 返回第一个样式定义包含classa的对象
+console.log($(".classa")); // 返回第一个样式定义包含classa的对象
+console.log($(".classb")); // 返回第一个样式定义包含classb的对象
+
+// 可以通过tagName获取DOM对象，例如
+console.log($("a")); // 返回第一个<a>对象
+console.log($("div")); // 返回第一个<div>对象
 
 // 可以通过attribute匹配获取DOM对象，例如
-$("[data-log]"); // 返回第一个包含属性data-log的对象
+console.log($("[data-log1]")); // 返回第一个包含属性data-log1的对象
+console.log($("[data-log2]")); // 返回第一个包含属性data-log2的对象
 
-$("[data-time=2015]"); // 返回第一个包含属性data-time且值为2015的对象
+console.log('————————————');
+
+console.log($("[data-time=2015]")); // 返回第一个包含属性data-time且值为2015的对象
 
 // 可以通过简单的组合提高查询便利性，例如
 $("#adom .classa"); // 返回id为adom的DOM所包含的所有子节点中，第一个样式定义包含classa的对象
