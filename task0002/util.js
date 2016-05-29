@@ -327,11 +327,12 @@ console.log(getPosition(addSpan));
 function $(selector) {
     var element = document.body;
     var result1 = 0;
+    var result2 = 0;
 
     function iterator(element, selector) {
         var eleChild = element.children;
         if (eleChild.length != 0) {
-            if (selector.charAt(0) === '#') {
+            if (selector.charAt(0) === '#' && selector.indexOf('.') == -1) {
                 for (var i = 0; i < eleChild.length; i++) {
                     if (eleChild[i].children.length == 0) {
                         if (eleChild[i].id === selector.substr(1)) {
@@ -351,7 +352,6 @@ function $(selector) {
 
             if (selector.charAt(0) === '.') {
                 for (var i = 0; i < eleChild.length; i++) {
-
                     if (eleChild[i].children.length == 0) {
                         if (hasClass1(eleChild[i], selector.substr(1))) {
                             result1 = eleChild[i];
@@ -366,7 +366,6 @@ function $(selector) {
                         }
                     }
                 }
-                return null;
             }
 
             if (/\w/i.test(selector.charAt(0))) {
@@ -431,6 +430,25 @@ function $(selector) {
                 }
             }
 
+            if (selector.charAt(0) === '#' && selector.indexOf('.') != -1) {
+                var classIndex = selector.indexOf('.');
+                for (var i = 0; i < eleChild.length; i++) {
+                    if (eleChild[i].children.length == 0) {
+                        if (eleChild[i].id === selector.substring(1,classIndex-1)) {
+                            result2 = eleChild[i];
+                            iterator(result2,selector.substr(classIndex));
+                        }
+                    } else {
+                        if (eleChild[i].id === selector.substring(1,classIndex-1)) {
+                            result2 = eleChild[i];
+                            iterator(result2,selector.substr(classIndex));
+                        } else {
+                            iterator(eleChild[i], selector);
+                        }
+                    }
+                }
+            }
+
         }
     }
 
@@ -470,4 +488,4 @@ console.log('————————————');
 console.log($("[data-time=2015]")); // 返回第一个包含属性data-time且值为2015的对象
 
 // 可以通过简单的组合提高查询便利性，例如
-$("#adom .classa"); // 返回id为adom的DOM所包含的所有子节点中，第一个样式定义包含classa的对象
+console.log($("#hiahia .catch-me")); // 返回id为hiahia的DOM所包含的所有子节点中，第一个样式定义包含catch-me的对象
