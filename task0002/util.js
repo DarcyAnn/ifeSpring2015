@@ -386,7 +386,7 @@ function $(selector) {
                 }
             }
 
-            if (selector.indexOf(']')!=-1 && selector.indexOf('=') == -1) {
+            if (selector.indexOf(']') != -1 && selector.indexOf('=') == -1) {
                 for (var i = 0; i < eleChild.length; i++) {
                     if (eleChild[i].children.length == 0) {
                         if (eleChild[i].getAttribute(selector.substr(1, selector.length - 2))) {
@@ -404,13 +404,13 @@ function $(selector) {
                 }
             }
 
-            if (selector.indexOf(']')!=-1 && /\=/.test(selector)) {
+            if (selector.indexOf(']') != -1 && /\=/.test(selector)) {
                 var selectorOri = selector.substr(1, selector.length - 2);
                 var selectorArr = selectorOri.split('=');
                 var selectorName = selectorArr[0];
                 var selectorValue = selectorArr[1];
                 for (var i = 0; i < eleChild.length; i++) {
-                    if(eleChild[i].children.length == 0){
+                    if (eleChild[i].children.length == 0) {
                         if (eleChild[i].getAttribute(selectorName)) {
                             if (eleChild[i].getAttribute(selectorName) === selectorValue) {
                                 result1 = eleChild[i];
@@ -434,14 +434,14 @@ function $(selector) {
                 var classIndex = selector.indexOf('.');
                 for (var i = 0; i < eleChild.length; i++) {
                     if (eleChild[i].children.length == 0) {
-                        if (eleChild[i].id === selector.substring(1,classIndex-1)) {
+                        if (eleChild[i].id === selector.substring(1, classIndex - 1)) {
                             result2 = eleChild[i];
-                            iterator(result2,selector.substr(classIndex));
+                            iterator(result2, selector.substr(classIndex));
                         }
                     } else {
-                        if (eleChild[i].id === selector.substring(1,classIndex-1)) {
+                        if (eleChild[i].id === selector.substring(1, classIndex - 1)) {
                             result2 = eleChild[i];
-                            iterator(result2,selector.substr(classIndex));
+                            iterator(result2, selector.substr(classIndex));
                         } else {
                             iterator(eleChild[i], selector);
                         }
@@ -489,3 +489,124 @@ console.log($("[data-time=2015]")); // 返回第一个包含属性data-time且�
 
 // 可以通过简单的组合提高查询便利性，例如
 console.log($("#hiahia .catch-me")); // 返回id为hiahia的DOM所包含的所有子节点中，第一个样式定义包含catch-me的对象
+
+/*
+ 4. 事件
+ */
+// 给一个element绑定一个针对event事件的响应，响应函数为listener
+function addEvent(element, event, listener) {
+    // your implement
+    if (element.addEventListener) {
+        element.addEventListener(event, listener, false);
+    } else if (element.attachEvent) {
+        element.attachEvent('on' + event, listener);
+    } else {
+        element['on' + event] = listener;
+    }
+}
+
+// 例如：
+function clicklistener(event) {
+    event = event | window.event;
+    alert(event.type);
+}
+addEvent($("#doma"), "click", clicklistener());
+
+// 移除element对象对于event事件发生时执行listener的响应
+function removeEvent(element, event, listener) {
+    // your implement
+    if (element.removeEventListener) {
+        element.removeEventListener(event, listener, false);
+    } else if (element.detachEvent) {
+        element.detachEvent('on' + event, listener);
+    } else {
+        element['on' + event] = listener;
+    }
+}
+
+//接下来我们实现一些方便的事件方法
+
+// 实现对click事件的绑定
+function addClickEvent(element, listener) {
+    // your implement
+    addEvent(element, 'click', listener);
+}
+
+// 实现对于按Enter键时的事件绑定
+function addEnterEvent(element, listener) {
+    // your implement
+    if (this.keyCode == 13) { //？
+        addEvent(element, 'keypress', listener);
+    }
+}
+
+$.on = function (element, event, listener) {
+    addEvent(element, event, listener);
+};
+$.un = function (element, event, listener) {
+    removeEvent(element, event, listener);
+};
+$.click = function (element, listener) {
+    addClickEvent(element, listener);
+};
+$.enter = function (element, listener) {
+    addEnterEvent(element, listener);
+};
+
+//使用事件代理， 先简单一些
+function delegateEvent(element, tag, eventName, listener) {
+    // your implement
+    if (eventName == 'click') {
+        $.click(element, listener);
+    }
+}
+
+$.delegate = delegateEvent;
+
+// 使用示例
+// 还是上面那段HTML，实现对list这个ul里面所有li的click事件进行响应
+
+function clickHandle(event){
+    console.log('clickHandle'+event.target);
+}
+
+$.delegate($("#list"), "li", "click", clickHandle);
+
+//估计有同学已经开始吐槽了，函数里面一堆$看着晕啊，那么接下来把我们的事件函数做如下封装改变：
+
+
+
+$.on=function(selector1, event, listener)
+{
+    // your implement
+    addEvent($(selector1), event, listener);
+}
+
+$.click=function(selector1, listener)
+{
+    // your implement
+    addClickEvent($(selector1), listener);
+}
+
+$.un=function(selector1, event, listener)
+{
+    // your implement
+    removeEvent($(selector1), event, listener);
+}
+
+$.delegate=function(selector1, tag, event, listener)
+{
+    // your implement
+    if (event == 'click') {
+        $.click($(selector1), listener);
+    }
+}
+function logListener(){
+
+}
+function liClicker(){
+
+}
+// 使用示例：
+$.click("[data-log]", logListener);
+$.delegate('#list', "li", "click", liClicker);
