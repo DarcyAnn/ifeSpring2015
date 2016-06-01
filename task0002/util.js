@@ -508,7 +508,6 @@ function addEvent(element, event, listener) {
 // 例如：
 function clicklistener(event) {
     event = event | window.event;
-    alert(event.type);
 }
 addEvent($("#doma"), "click", clicklistener());
 
@@ -554,10 +553,10 @@ $.enter = function (element, listener) {
 };
 
 //使用事件代理， 先简单一些
-function delegateEvent(element, tag, eventName, listener) {
+function delegateEvent(e_selector, tag, eventName, listener) {
     // your implement
     if (eventName == 'click') {
-        $.click(element, listener);
+        $.click(e_selector, listener);
     }
 }
 
@@ -566,8 +565,8 @@ $.delegate = delegateEvent;
 // 使用示例
 // 还是上面那段HTML，实现对list这个ul里面所有li的click事件进行响应
 
-function clickHandle(event){
-    console.log('clickHandle'+event.target);
+function clickHandle(event) {
+    console.log('clickHandle' + event.target);
 }
 
 $.delegate($("#list"), "li", "click", clickHandle);
@@ -575,38 +574,77 @@ $.delegate($("#list"), "li", "click", clickHandle);
 //估计有同学已经开始吐槽了，函数里面一堆$看着晕啊，那么接下来把我们的事件函数做如下封装改变：
 
 
-
-$.on=function(selector1, event, listener)
-{
+$.on = function (selector1, event, listener) {
     // your implement
     addEvent($(selector1), event, listener);
 }
 
-$.click=function(selector1, listener)
-{
+$.click = function (selector1, listener) {
     // your implement
     addClickEvent($(selector1), listener);
 }
 
-$.un=function(selector1, event, listener)
-{
+$.un = function (selector1, event, listener) {
     // your implement
     removeEvent($(selector1), event, listener);
 }
 
-$.delegate=function(selector1, tag, event, listener)
-{
+$.delegate = function (selector1, tag, event, listener) {
     // your implement
-    if (event == 'click') {
-        $.click($(selector1), listener);
-    }
+    delegateEvent(selector1, tag, event, listener)
 }
-function logListener(){
+function logListener() {
 
 }
-function liClicker(){
+function liClicker() {
 
 }
 // 使用示例：
 $.click("[data-log]", logListener);
-$.delegate('#list', "li", "click", liClicker);
+$.delegate("#list", "li", "click", liClicker);
+
+/*
+ BOM
+ */
+
+// 判断是否为IE浏览器，返回-1或者版本号
+function isIE() {
+    // your implement
+    var ua = navigator.userAgent;
+    if (ua.indexOf('MSIE') >= 0 || ua.indexOf('Trident') >= 0) {
+        console.log('IE浏览器。' + navigator.appVersion);
+        return navigator.appVersion;
+    } else {
+        console.log('不是IE浏览器');
+        return -1;
+    }
+}
+
+// 设置cookie
+function setCookie(cookieName, cookieValue, expiredays) {
+    // your implement
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + expiredays);
+    document.cookie = cookieName + '=' + escape(cookieValue) + ((expiredays == null) ? '' : ';expires=' + exdate.toGMTString());
+}
+
+// 获取cookie值
+function getCookie(cookieName) {
+    // your implement
+    var c_start,c_end;
+    if (document.cookie.length > 0) {
+        c_start = document.cookie.indexOf(cookieName + "=");
+        if (c_start != -1) {
+            c_start = c_start + cookieName.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            console.log(unescape(document.cookie.substring(c_start, c_end)));
+            return unescape(document.cookie.substring(c_start, c_end));
+        }
+    }
+    return "";
+}
+
+isIE();
+setCookie('USERID', '81921', 30000000);
+getCookie('USERID');
