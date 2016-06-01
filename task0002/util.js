@@ -631,7 +631,7 @@ function setCookie(cookieName, cookieValue, expiredays) {
 // 获取cookie值
 function getCookie(cookieName) {
     // your implement
-    var c_start,c_end;
+    var c_start, c_end;
     if (document.cookie.length > 0) {
         c_start = document.cookie.indexOf(cookieName + "=");
         if (c_start != -1) {
@@ -648,3 +648,53 @@ function getCookie(cookieName) {
 isIE();
 setCookie('USERID', '81921', 30000000);
 getCookie('USERID');
+
+
+// 学习Ajax，并尝试自己封装一个Ajax方法。实现如下方法：
+/*
+ options是一个对象，里面可以包括的参数为：
+ type: post或者get，可以有一个默认值
+ data: 发送的数据，为一个键值对象或者为一个用&连接的赋值字符串
+ onsuccess: 成功时的调用函数
+ onfail: 失败时的调用函数
+ */
+function ajax(url, options) {
+    // your implement
+    var xhr;
+    if (window.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+    } else {
+        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    if (options.type == 'post') {
+        xhr.open('post', url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(options.data);
+    } else {
+        xhr.open('get', url + '?' + options.data + '&t=' + Math.random(), true);
+        xhr.send();
+    }
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            options.onsuccess(xhr.responseText, xhr);
+        } else if (options.onfail) {
+            options.onfail(xhr);
+        }
+    }
+}
+
+// 使用示例：
+ajax(
+    'ajaxTest.txt',
+    {
+        data: {
+            name: 'simon',
+            password: '123456'
+        },
+        onsuccess: function (responseText, xhr) {
+            console.log(responseText);
+        }
+    }
+);
