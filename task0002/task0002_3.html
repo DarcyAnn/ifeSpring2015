@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task0002_3</title>
+    <style type="text/css">
+        li {
+            list-style: none;
+        }
+        #outer{
+            max-width: 580px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #carousel {
+            max-width: 580px;
+            height: 387px;
+            position: relative;
+            border: 1px solid black;
+            left:0;
+        }
+
+        #carousel li {
+            width: 100%;
+            position: absolute;
+        }
+
+        #carousel :first-child {
+            left: 0;
+            z-index: 2;
+        }
+
+        #carousel :nth-child(2) {
+            left: 100%;
+            z-index: 2;
+        }
+
+        #carousel :nth-child(3) {
+            left: 200%;
+            z-index: 2;
+        }
+
+        #carousel li img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="outer">
+    <ul id="carousel">
+        <li><img src="image/OneDS1.jpg" alt=""></li>
+        <li><img src="image/OneDS2.jpg" alt=""></li>
+        <li><img src="image/OneDS3.jpg" alt=""></li>
+    </ul>
+    <ul id="item">
+        <li><span>1</span></li>
+        <li><span>2</span></li>
+        <li><span>3</span></li>
+    </ul>
+</div>
+
+<script src="js/task0002_3.js"></script>
+</body>
+</html>
