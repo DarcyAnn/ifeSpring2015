@@ -6,16 +6,6 @@
         item = document.getElementById('item');
     var imgWidth = parseInt(window.getComputedStyle(carousel.children[0]).width);
     var timer = 0;
-    function addEvent(element, event, listener) {
-        // your implement
-        if (element.addEventListener) {
-            element.addEventListener(event, listener, false);
-        } else if (element.attachEvent) {
-            element.attachEvent('on' + event, listener);
-        } else {
-            element['on' + event] = listener;
-        }
-    }
 
     window.onresize = function () {
         imgWidth = parseInt(window.getComputedStyle(carousel.children[0]).width);
