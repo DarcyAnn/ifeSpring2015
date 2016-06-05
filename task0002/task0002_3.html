@@ -7,10 +7,12 @@
         li {
             list-style: none;
         }
-        #outer{
+
+        #outer {
             max-width: 580px;
             position: relative;
             overflow: hidden;
+            margin: 10px auto;
         }
 
         #carousel {
@@ -18,7 +20,8 @@
             height: 387px;
             position: relative;
             border: 1px solid black;
-            left:0;
+            left: 0;
+            transition: left 1s;
         }
 
         #carousel li {
@@ -44,19 +47,46 @@
         #carousel li img {
             width: 100%;
         }
+
+        #item {
+            position: absolute;
+            bottom: 10px;
+            left: 36%;
+            z-index: 3;
+        }
+
+        #item li {
+            display: inline-block;
+            margin: 0 5px;
+            border: 1px solid #000;
+            width: 11px;
+            height: 11px;
+            border-radius: 11px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        #item li:hover {
+            background-color: #848484;
+        }
+        #item li:first-child{
+            background-color: #848484;
+        }
     </style>
 </head>
 <body>
+
 <div id="outer">
+    <h3>One Direction </h3>
     <ul id="carousel">
         <li><img src="image/OneDS1.jpg" alt=""></li>
         <li><img src="image/OneDS2.jpg" alt=""></li>
         <li><img src="image/OneDS3.jpg" alt=""></li>
     </ul>
     <ul id="item">
-        <li><span>1</span></li>
-        <li><span>2</span></li>
-        <li><span>3</span></li>
+        <li><span></span></li>
+        <li><span></span></li>
+        <li><span></span></li>
     </ul>
 </div>
 
