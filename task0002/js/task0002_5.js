@@ -21,28 +21,55 @@
         for (var i = 0; i < length; i++) {
             (function (m) {
                 leftOuter.children[m].onmousedown = function (event) {
-                    originClientX = event.clientX;
-                    originClientY = event.clientY;
-                    itemTop = leftOuter.children[m].offsetTop;
-                    console.log('clientX:' + event.clientX + ';offsetLeft:' + leftOuter.children[m].offsetLeft + ';pointLeft:' + pointLeft);
-                    console.log('clientY:' + event.clientY + ';offsetTop:' + leftOuter.children[m].offsetTop + ';pointTop:' + pointTop);
+                    if (leftOuter.children[m].offsetLeft < targetLeft) {//从左边移到右边
+                        originClientX = event.clientX;
+                        originClientY = event.clientY;
+                        itemTop = leftOuter.children[m].offsetTop;
+                        console.log('clientX:' + event.clientX + ';offsetLeft:' + leftOuter.children[m].offsetLeft + ';pointLeft:' + pointLeft);
+                        console.log('clientY:' + event.clientY + ';offsetTop:' + leftOuter.children[m].offsetTop + ';pointTop:' + pointTop);
 
-                    leftOuter.children[m].onmousemove = function (event) {
-                        leftOuter.children[m].style.left = event.clientX - originClientX + 'px';
-                        leftOuter.children[m].style.top = event.clientY - originClientY + 'px';
-                        console.log('clientX:' + event.clientX + ';targetLeft:' + targetLeft);
-                        if ((leftOuter.children[m].offsetLeft + 80) > targetLeft) {
-                            leftOuter.children[m].style.left = targetLeft - originLeft + 'px';
-                            console.log('height:' + leftOuter.children[m].offsetHeight + '!:' + targetCount * leftOuter.children[m].offsetHeight);
-                            leftOuter.children[m].style.top = targetTop + targetCount * leftOuter.children[m].offsetHeight - itemTop + 'px';
-                            originCount--;
-                            targetCount++;
-                            leftOuter.children[m].onmousemove = null;
+                        leftOuter.children[m].onmousemove = function (event) {
+                            leftOuter.children[m].style.left = event.clientX - originClientX + 'px';
+                            leftOuter.children[m].style.top = event.clientY - originClientY + 'px';
+                            console.log('clientX:' + event.clientX + ';targetLeft:' + targetLeft);
+                            if ((leftOuter.children[m].offsetLeft + 80) > targetLeft) {
+                                leftOuter.children[m].style.left = targetLeft - originLeft + 'px';
+                                console.log('height:' + leftOuter.children[m].offsetHeight + '!:' + targetCount * leftOuter.children[m].offsetHeight);
+                                leftOuter.children[m].style.top = targetTop + targetCount * leftOuter.children[m].offsetHeight - itemTop + 'px';
+                                originCount--;
+                                targetCount++;
+                                leftOuter.children[m].onmousemove = null;
+                            }
                         }
-                    }
-                    leftOuter.children[m].onmouseup = function () {
-                        leftOuter.children[m].onmouseover = null;
-                        leftOuter.children[m].onmouseup = null;
+                        leftOuter.children[m].onmouseup = function () {
+                            leftOuter.children[m].onmouseover = null;
+                            leftOuter.children[m].onmouseup = null;
+                        }
+                    } else {//从右边移到左边
+                        originClientX = event.clientX;
+                        originClientY = event.clientY;
+                        console.log('clientX:' + event.clientX + ';offsetLeft:' + leftOuter.children[m].offsetLeft + ';pointLeft:' + pointLeft);
+                        console.log('clientY:' + event.clientY + ';offsetTop:' + leftOuter.children[m].offsetTop + ';pointTop:' + pointTop);
+                        console.log('left:' + leftOuter.children[m].style.left + ';originLeft:' + originLeft);
+
+                        leftOuter.children[m].onmousemove = function (event) {
+                            leftOuter.children[m].style.left = targetLeft - originLeft - (originClientX - event.clientX) + 'px';
+                            //下面这行有问题，再看看哇
+                            leftOuter.children[m].style.top = targetTop + (targetCount-1) * leftOuter.children[m].offsetHeight - itemTop + event.clientY - originClientY + 'px';
+                            console.log('left:' + leftOuter.children[m].style.left + ';originLeft:' + originLeft);
+                            if (leftOuter.children[m].offsetLeft  < (originLeft + 80)) {
+                                leftOuter.children[m].style.left = 0;
+                                console.log('height:' + leftOuter.children[m].offsetHeight + '!:' + targetCount * leftOuter.children[m].offsetHeight);
+                                leftOuter.children[m].style.top = 0;
+                                originCount++;
+                                targetCount--;
+                                leftOuter.children[m].onmousemove = null;
+                            }
+                        }
+                        leftOuter.children[m].onmouseup = function () {
+                            leftOuter.children[m].onmouseover = null;
+                            leftOuter.children[m].onmouseup = null;
+                        }
                     }
                 };
 
