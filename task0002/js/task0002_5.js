@@ -8,8 +8,6 @@
         originLeft = leftOuter.offsetLeft,//左边起始容器的left
         targetLeft = rightOuter.offsetLeft,//右边目标容器的left
         targetTop = rightOuter.offsetTop,
-        pointLeft = 0,//鼠标指针与被拖动元素左边界的距离
-        pointTop = 0,
         originClientX = 0,
         originClientY = 0,
         originCount = length,
@@ -27,11 +25,14 @@
                         originClientX = event.clientX;
                         originClientY = event.clientY;
                         itemTop = leftOuter.children[m].offsetTop;
-
                         leftOuter.children[m].onmousemove = function (event) {
+                            leftOuter.children[m].style.filter = 'alpha(opacity:60)';
+                            leftOuter.children[m].style.opacity = 0.6;
                             leftOuter.children[m].style.left = event.clientX - originClientX + 'px';
                             leftOuter.children[m].style.top = event.clientY - originClientY + 'px';
                             if ((leftOuter.children[m].offsetLeft + 80) > targetLeft) {
+                                leftOuter.children[m].style.filter = 'alpha(opacity:100)';
+                                leftOuter.children[m].style.opacity = 1;
                                 leftOuter.children[m].style.left = targetLeft - originLeft + 'px';
                                 leftOuter.children[m].style.top = targetTop + targetCount * itemHeight - itemTop + 'px';
                                 originCount--;
@@ -39,6 +40,7 @@
                                 leftOuter.children[m].onmousemove = null;
                             }
                         }
+                        //下面这行有问题，再看看哇
                         leftOuter.children[m].onmouseup = function () {
                             leftOuter.children[m].onmouseover = null;
                             leftOuter.children[m].onmouseup = null;
@@ -48,19 +50,15 @@
                         originClientY = event.clientY;
                         itemTop = leftOuter.children[m].offsetTop;
                         rightItemTop = parseInt(leftOuter.children[m].style.top);
-                        console.log('clientX:' + event.clientX + ';offsetLeft:' + leftOuter.children[m].offsetLeft + ';pointLeft:' + pointLeft);
-                        console.log('clientY:' + event.clientY + ';offsetTop:' + leftOuter.children[m].offsetTop + ';pointTop:' + pointTop);
-                        console.log('left:' + leftOuter.children[m].style.left + ';originLeft:' + originLeft);
-
                         leftOuter.children[m].onmousemove = function (event) {
+                            leftOuter.children[m].style.filter = 'alpha(opacity:60)';
+                            leftOuter.children[m].style.opacity = 0.6;
                             leftOuter.children[m].style.left = targetLeft - originLeft - (originClientX - event.clientX) + 'px';
-                            //下面这行有问题，再看看哇
-
                             leftOuter.children[m].style.top =  rightItemTop + event.clientY - originClientY + 'px';
-                            console.log('left:' + leftOuter.children[m].style.left + ';originLeft:' + originLeft);
                             if (leftOuter.children[m].offsetLeft < (originLeft + 80)) {
+                                leftOuter.children[m].style.filter = 'alpha(opacity:100)';
+                                leftOuter.children[m].style.opacity = 1;
                                 leftOuter.children[m].style.left = 0;
-                                console.log('height:' + itemHeight + '!:' + targetCount * itemHeight);
                                 leftOuter.children[m].style.top = 0;
                                 originCount++;
                                 targetCount--;
@@ -73,8 +71,6 @@
                         }
                     }
                 };
-
-
             })(i);
         }
     }
